@@ -19,11 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.star_bat.control.Enemies;
 import com.star_bat.control.Hangar;
 import com.star_bat.control.Keyboard;
 import com.star_bat.control.Player;
 import com.star_bat.control.Touchstick;
-import com.star_bat.control.WaveBuilder;
 import com.star_bat.control.entity.Pilot;
 import com.star_bat.control.entity.pawn.Bullet;
 import com.star_bat.control.entity.pawn.series.Arena;
@@ -44,6 +44,7 @@ public class StarBat extends ApplicationAdapter {
 	Stage stage;
 	Vector3 v0 = new Vector3();
 	Hangar hangar;
+	Enemies enemies;
 
 	public void create() {
 		Assets.load();
@@ -71,28 +72,28 @@ public class StarBat extends ApplicationAdapter {
 		// Gdx.input.setInputProcessor(stage);
 
 		switch (Gdx.app.getType()) {
-		case iOS:
-		case Android:
-			player = new Player(cam, new Touchstick(stage));
-			break;
-		default:
-			player = new Player(cam, new Keyboard());
-			break;
+			case iOS:
+			case Android:
+				player = new Player(cam, new Touchstick(stage));
+				break;
+			default:
+				player = new Player(cam, new Keyboard());
+				break;
 		}
 
-		hangar = new Hangar(new WaveBuilder().build());
+		enemies = new Enemies(player.bulletMat);
+		hangar = new Hangar(enemies.genWaves());
 		hangar.nextWave();
 
+		player.setEnemyBulletMat(enemies.bulletMat);
+
 	}
 
-	void renderInstance(ModelInstance instance) {
-		instance.transform.getTranslation(v0);
+	void renderInstance(ModelInstance inst) {
+		inst.transform.getTranslation(v0);
 		if (cam.frustum.pointInFrustum(v0)) {
-			modelBatch.render(instance, environment);
+			modelBatch.render(inst, environment);
 		}
-	}
-
-	void renderBullets(Arena<Bullet> bullets) {
 	}
 
 	public void render() {
@@ -106,19 +107,20 @@ public class StarBat extends ApplicationAdapter {
 
 		modelBatch.begin(cam);
 
-		renderInstance(player.instance);
-		for (Bullet bullet : player.primaryArena.arr) {
-			renderInstance(bullet.instance);
+		renderInstance(player.inst);
+		for (Arena<Bullet> bullets : player.bulletMat) {
+			for (Bullet bullet : bullets.arr) {
+				renderInstance(bullet.body.inst);
+			}
 		}
 
-		for (Bullet bullet : hangar.balls.arr) {
-			renderInstance(bullet.instance);
+		for (Arena<Bullet> bullets : enemies.bulletMat) {
+			for (Bullet bullet : bullets.arr) {
+				renderInstance(bullet.body.inst);
+			}
 		}
-		for (Bullet bullet : hangar.cones.arr) {
-			renderInstance(bullet.instance);
-		}
-		for(Pilot pilot : hangar.getWave()) {
-			renderInstance(pilot.instance);
+		for (Pilot pilot : hangar.getWave()) {
+			renderInstance(pilot.ship.body.inst);
 		}
 
 		modelBatch.end();
