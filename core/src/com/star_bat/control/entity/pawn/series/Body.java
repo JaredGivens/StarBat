@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Body {
   public Vector3 pos = new Vector3();
-  public Vector3 scl = new Vector3();
+  public Vector3 scl = new Vector3(1f, 1f, 1f);
   public Quaternion rot = new Quaternion();
   public ModelInstance inst;
 

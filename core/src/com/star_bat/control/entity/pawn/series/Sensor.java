@@ -14,13 +14,17 @@ public class Sensor{
     radius = bBox.max.len();
   }
 
-  public boolean contains(Sensor aabb) {
+  public boolean intersects(Sensor sensor) {
     // i swear this is smart
     bBox.max.add(pos);
     bBox.min.add(pos);
-    boolean res = bBox.contains(aabb.bBox);
+    sensor.bBox.max.add(sensor.pos);
+    sensor.bBox.min.add(sensor.pos);
+    boolean res = bBox.intersects(sensor.bBox);
     bBox.max.sub(pos);
     bBox.min.sub(pos);
+    sensor.bBox.max.sub(sensor.pos);
+    sensor.bBox.min.sub(sensor.pos);
     return res;
   }
 }

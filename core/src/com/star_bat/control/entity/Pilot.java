@@ -120,13 +120,14 @@ public class Pilot {
 
 				// hit detection
 				for (Arena<Bullet> arena : spec.playerBulletMat) {
+					
 					for (Bullet bullet : arena.arr) {
-						// if( bullet.contains(ship.sensor)) {
-						// ship.hp -= bullet.dmg;
-						// if (ship.hp < 0) {
-						// System.out.println("dead");
-						// }
-						// }
+						if (bullet.intersects(ship.sensor)) {
+							ship.hp -= bullet.dmg;
+							if (ship.hp < 0) {
+								System.out.println("dead");
+							}
+						}
 					}
 				}
 

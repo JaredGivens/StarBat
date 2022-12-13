@@ -66,10 +66,10 @@ public class Bullet {
 		active = true;
 	}
 
-	public boolean contains(Sensor sensor) {
+	public boolean intersects(Sensor sensor) {
 		boolean res = active;
-		res &= this.sensor.pos.dst(sensor.pos) < (this.sensor.radius + sensor.radius) * 2;
-		res &= this.sensor.contains(sensor);
+		res &= this.sensor.pos.dst(sensor.pos) < (this.sensor.radius + sensor.radius);
+		res &= this.sensor.intersects(sensor);
 		return res;
 
 	}

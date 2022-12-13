@@ -81,7 +81,7 @@ public class Player {
 		}
 
 		for (Arena<Bullet> bullets : bulletMat) {
-			for (Bullet bullet: bullets.arr) {
+			for (Bullet bullet : bullets.arr) {
 				bullet.update();
 			}
 		}

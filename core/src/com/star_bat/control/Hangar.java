@@ -1,17 +1,11 @@
 package com.star_bat.control;
 
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.star_bat.control.entity.Pilot;
 import com.star_bat.control.entity.Pilot.Ship;
 import com.star_bat.control.entity.Pilot.Spec;
-import com.star_bat.control.entity.pawn.Bullet;
 import com.star_bat.control.entity.pawn.series.Arena;
-import com.star_bat.control.entity.pawn.series.Assets;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Hangar {
@@ -40,7 +34,6 @@ public class Hangar {
 
 		for (HashMap.Entry<Spec, Integer> e : maxAmts.entrySet()) {
 			Ship[] ships = new Ship[e.getValue()];
-			System.out.println(e.getValue());
 			for (int j = 0; j < ships.length; ++j) {
 				ships[j] = new Ship(e.getKey());
 			}
