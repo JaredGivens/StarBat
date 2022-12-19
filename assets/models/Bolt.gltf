@@ -1,6 +1,6 @@
 {
     "asset" : {
-        "generator" : "Khronos glTF Blender I/O v1.2.75",
+        "generator" : "Khronos glTF Blender I/O v3.4.49",
         "version" : "2.0"
     },
     "scene" : 0,
@@ -17,10 +17,20 @@
             "mesh" : 0,
             "name" : "Cone",
             "rotation" : [
-                0.7071067690849304,
+                0.7071068286895752,
                 0,
                 0,
-                0.7071067690849304
+                0.7071068286895752
+            ],
+            "scale" : [
+                0.7883954644203186,
+                0.7883954644203186,
+                0.7883954644203186
+            ],
+            "translation" : [
+                0,
+                0,
+                0.1949230134487152
             ]
         }
     ],
@@ -31,8 +41,8 @@
                 {
                     "attributes" : {
                         "POSITION" : 0,
-                        "NORMAL" : 1,
-                        "TEXCOORD_0" : 2
+                        "TEXCOORD_0" : 1,
+                        "NORMAL" : 2
                     },
                     "indices" : 3
                 }
@@ -60,13 +70,13 @@
             "bufferView" : 1,
             "componentType" : 5126,
             "count" : 18,
-            "type" : "VEC3"
+            "type" : "VEC2"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
             "count" : 18,
-            "type" : "VEC2"
+            "type" : "VEC3"
         },
         {
             "bufferView" : 3,
@@ -79,22 +89,26 @@
         {
             "buffer" : 0,
             "byteLength" : 216,
-            "byteOffset" : 0
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 216,
-            "byteOffset" : 216
+            "byteOffset" : 0,
+            "target" : 34962
         },
         {
             "buffer" : 0,
             "byteLength" : 144,
-            "byteOffset" : 432
+            "byteOffset" : 216,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 216,
+            "byteOffset" : 360,
+            "target" : 34962
         },
         {
             "buffer" : 0,
             "byteLength" : 36,
-            "byteOffset" : 576
+            "byteOffset" : 576,
+            "target" : 34963
         }
     ],
     "buffers" : [

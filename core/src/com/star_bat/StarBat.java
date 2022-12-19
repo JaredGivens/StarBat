@@ -2,136 +2,77 @@ package com.star_bat;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.star_bat.control.Enemies;
-import com.star_bat.control.Hangar;
-import com.star_bat.control.Keyboard;
-import com.star_bat.control.Player;
-import com.star_bat.control.Touchstick;
-import com.star_bat.control.entity.Pilot;
-import com.star_bat.control.entity.pawn.Bullet;
-import com.star_bat.control.entity.pawn.series.Arena;
-import com.star_bat.control.entity.pawn.series.Assets;
+import com.star_bat.space.control.pawn.series.Assets;
+import com.star_bat.space.Court;
 
 public class StarBat extends ApplicationAdapter {
-	PerspectiveCamera cam;
+
+
 	SpriteBatch batch;
-	ModelBatch modelBatch;
 	SpriteBatch spriteBatch;
-	Environment environment;
-	FileHandle starBatPath;
-	Player player;
-	FitViewport fitView;
+	ModelBatch modelBatch;
+	Court court;
+
 	ExtendViewport view;
 	Stage stage;
 	Vector3 v0 = new Vector3();
-	Hangar hangar;
-	Enemies enemies;
 
+	@Override
 	public void create() {
 		Assets.load();
 
-		environment = new Environment();
-		environment.set(
-				new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-		environment.add(new DirectionalLight().set(.8f, .8f, .8f, -1f, .8f, -.2f));
 
 		modelBatch = new ModelBatch();
 		spriteBatch = new SpriteBatch();
 
-		cam = new PerspectiveCamera();
-		cam.fieldOfView = 67;
-		cam.position.set(0f, 64f, 32f);
-		cam.lookAt(0f, 0f, 0f);
+		court = new Court();
+		view = new ExtendViewport(1080f, 2160f, court.cam);
 
-		cam.near = 1f;
-		cam.far = 300f;
-		cam.update();
 		// fitView = new FitViewport(8f, 16f, cam);
-		view = new ExtendViewport(1080f, 2160f, cam);
+
+		// enemyShader = new EnemyShader();
+		// enemyShader.init();
+		// enemyShader.eye = cam.position;
 
 		// stage = new Stage(view, spriteBatch);
 		// Gdx.input.setInputProcessor(stage);
 
-		switch (Gdx.app.getType()) {
-			case iOS:
-			case Android:
-				player = new Player(cam, new Touchstick(stage));
-				break;
-			default:
-				player = new Player(cam, new Keyboard());
-				break;
-		}
 
-		enemies = new Enemies(player.bulletMat);
-		hangar = new Hangar(enemies.genWaves());
-		hangar.nextWave();
-
-		player.setEnemyBulletMat(enemies.bulletMat);
 
 	}
 
-	void renderInstance(ModelInstance inst) {
-		inst.transform.getTranslation(v0);
-		if (cam.frustum.pointInFrustum(v0)) {
-			modelBatch.render(inst, environment);
-		}
-	}
 
+
+	@Override
 	public void render() {
-
-		float dt = Gdx.graphics.getDeltaTime();
-		player.update(dt);
-		hangar.update(dt);
-
 		Gdx.gl.glClearColor(.2f, .2f, .2f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		modelBatch.begin(cam);
+		court.move(Gdx.graphics.getDeltaTime());
+		court.collide();
 
-		renderInstance(player.inst);
-		for (Arena<Bullet> bullets : player.bulletMat) {
-			for (Bullet bullet : bullets.arr) {
-				renderInstance(bullet.body.inst);
-			}
-		}
-
-		for (Arena<Bullet> bullets : enemies.bulletMat) {
-			for (Bullet bullet : bullets.arr) {
-				renderInstance(bullet.body.inst);
-			}
-		}
-		for (Pilot pilot : hangar.getWave()) {
-			renderInstance(pilot.ship.body.inst);
-		}
-
+		modelBatch.begin(court.cam);
+		court.render(modelBatch);
 		modelBatch.end();
 
 		spriteBatch.begin();
-		for (Sprite sprite : player.sprites) {
-			sprite.draw(spriteBatch);
-		}
+		court.draw(spriteBatch);
 		spriteBatch.end();
 	}
 
+	@Override
 	public void resize(int width, int height) {
 		// fitView.update(width, height);
 		view.update(width, height);
 	}
 
+	@Override
 	public void dispose() {
 		Assets.dispose();
 		modelBatch.dispose();
