@@ -65,7 +65,7 @@ public class Player {
 		v1.set(Vector3.Y).crs(v0);
 		v1.x = 0;
 		q0.setFromAxisRad(v1, .4f);
-		body.rot.slerp(q0, dt * 8f);
+		// body.rot.slerp(q0, dt * 8f);
 
 		v1.set(0f, 0f, -300f);
 
